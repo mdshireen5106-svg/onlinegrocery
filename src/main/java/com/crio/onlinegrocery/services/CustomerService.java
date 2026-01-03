@@ -7,11 +7,11 @@ public interface CustomerService {
 
     CustomerEntity createCustomer(CustomerEntity customer);
 
-    CustomerEntity getCustomerById(String customerId);
+    CustomerEntity getCustomerById(Long customerId);
 
     List<CustomerEntity> getAllCustomers();
 
-    CustomerEntity updateCustomer(String customerId, CustomerEntity customer);
+    CustomerEntity updateCustomer(Long customerId, CustomerEntity customer);
 
-    void deleteCustomer(String customerId);
+    void deleteCustomer(Long customerId);
 }

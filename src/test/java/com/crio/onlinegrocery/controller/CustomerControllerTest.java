@@ -14,9 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.mockito.quality.Strictness;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,10 +40,9 @@ class CustomerControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Helper method
     private CustomerEntity getCustomer() {
         CustomerEntity customer = new CustomerEntity();
-        customer.setCustomerId("cust123");
+        customer.setCustomerId(1L);
         customer.setName("John Doe");
         customer.setEmail("john@example.com");
         customer.setAddress("Bangalore");
@@ -63,20 +62,20 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById_success() throws Exception {
-        Mockito.when(customerRepository.findById("cust123"))
+        Mockito.when(customerRepository.findById(1L))
                 .thenReturn(Optional.of(getCustomer()));
 
-        mockMvc.perform(get("/customers/cust123"))
+        mockMvc.perform(get("/customers/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("john@example.com"));
     }
 
     @Test
     void getCustomerById_notFound() throws Exception {
-        Mockito.when(customerRepository.findById("invalid"))
+        Mockito.when(customerRepository.findById(999L))
                 .thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/customers/invalid"))
+        mockMvc.perform(get("/customers/999"))
                 .andExpect(status().isNotFound());
     }
 
@@ -100,12 +99,12 @@ class CustomerControllerTest {
         CustomerEntity updated = getCustomer();
         updated.setName("Updated Name");
 
-        Mockito.when(customerRepository.findById("cust123"))
+        Mockito.when(customerRepository.findById(1L))
                 .thenReturn(Optional.of(existing));
         Mockito.when(customerRepository.save(Mockito.any(CustomerEntity.class)))
                 .thenReturn(updated);
 
-        mockMvc.perform(put("/customers/cust123")
+        mockMvc.perform(put("/customers/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updated)))
                 .andExpect(status().isOk())
@@ -114,10 +113,10 @@ class CustomerControllerTest {
 
     @Test
     void deleteCustomer_success() throws Exception {
-        Mockito.when(customerRepository.findById("cust123"))
+        Mockito.when(customerRepository.findById(1L))
                 .thenReturn(Optional.of(getCustomer()));
 
-        mockMvc.perform(delete("/customers/cust123"))
+        mockMvc.perform(delete("/customers/1"))
                 .andExpect(status().isOk());
     }
 }

@@ -23,7 +23,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public CustomerEntity getById(@PathVariable String id) {
+    public CustomerEntity getById(@PathVariable Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
     }
@@ -34,7 +34,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public CustomerEntity update(@PathVariable String id, @RequestBody CustomerEntity updated) {
+    public CustomerEntity update(@PathVariable Long id, @RequestBody CustomerEntity updated) {
         CustomerEntity c = getById(id);
         c.setName(updated.getName());
         c.setEmail(updated.getEmail());
@@ -44,7 +44,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
+    public void delete(@PathVariable Long id) {
         repo.delete(getById(id));
     }
 }

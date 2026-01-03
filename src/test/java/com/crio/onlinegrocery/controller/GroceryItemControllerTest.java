@@ -40,10 +40,9 @@ class GroceryItemControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Helper method
     private GroceryItemEntity getItem() {
         GroceryItemEntity item = new GroceryItemEntity();
-        item.setItemId("item123");
+        item.setItemId(1L);
         item.setName("Milk");
         item.setCategory("Dairy");
         item.setPrice(45.0);
@@ -75,5 +74,43 @@ class GroceryItemControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Milk"))
                 .andExpect(jsonPath("$.price").value(45.0));
+    }
+
+    @Test
+    void getItemById_success() throws Exception {
+        Mockito.when(itemRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(getItem()));
+
+        mockMvc.perform(get("/items/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Milk"))
+                .andExpect(jsonPath("$.category").value("Dairy"));
+    }
+
+    @Test
+    void updateItem_success() throws Exception {
+        GroceryItemEntity existing = getItem();
+        GroceryItemEntity updated = getItem();
+        updated.setName("Cheese");
+
+        Mockito.when(itemRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(existing));
+        Mockito.when(itemRepository.save(Mockito.any(GroceryItemEntity.class)))
+                .thenReturn(updated);
+
+        mockMvc.perform(put("/items/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updated)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Cheese"));
+    }
+
+    @Test
+    void deleteItem_success() throws Exception {
+        Mockito.when(itemRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(getItem()));
+
+        mockMvc.perform(delete("/items/1"))
+                .andExpect(status().isOk());
     }
 }

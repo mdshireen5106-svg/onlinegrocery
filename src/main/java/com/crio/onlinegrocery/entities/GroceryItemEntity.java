@@ -1,19 +1,23 @@
 package com.crio.onlinegrocery.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.validation.constraints.NotNull;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 @Data
 @NoArgsConstructor
-@Document(collection = "grocery_items")
+@Entity
+@Table(name = "grocery_items")
 public class GroceryItemEntity {
 
     @Id
-    private String itemId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long itemId;
 
     @NotNull
     private String name;

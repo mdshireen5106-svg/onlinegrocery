@@ -7,11 +7,11 @@ public interface OrderService {
 
     OrderEntity createOrder(OrderEntity order);
 
-    OrderEntity getOrderById(String orderId);
+    OrderEntity getOrderById(Long orderId);
 
     List<OrderEntity> getAllOrders();
 
-    List<OrderEntity> getOrdersByCustomerId(String customerId);
+    List<OrderEntity> getOrdersByCustomerId(Long customerId);
 
-    void deleteOrder(String orderId);
+    void deleteOrder(Long orderId);
 }

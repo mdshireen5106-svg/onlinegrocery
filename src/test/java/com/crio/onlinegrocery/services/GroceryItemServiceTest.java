@@ -24,10 +24,9 @@ class GroceryItemServiceImplTest {
         itemService = new GroceryItemServiceImpl(itemRepository);
     }
 
-    // Helper method to create a sample grocery item
     private GroceryItemEntity getItem() {
         GroceryItemEntity item = new GroceryItemEntity();
-        item.setItemId("item123");
+        item.setItemId(1L); 
         item.setName("Milk");
         item.setCategory("Dairy");
         item.setPrice(45.0);
@@ -50,23 +49,23 @@ class GroceryItemServiceImplTest {
     @Test
     void getItemById_success() {
         GroceryItemEntity item = getItem();
-        when(itemRepository.findById("item123")).thenReturn(Optional.of(item));
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
 
-        GroceryItemEntity found = itemService.getItemById("item123");
+        GroceryItemEntity found = itemService.getItemById(1L);
 
         assertEquals("Dairy", found.getCategory());
-        verify(itemRepository, times(1)).findById("item123");
+        verify(itemRepository, times(1)).findById(1L);
     }
 
     @Test
     void getItemById_notFound() {
-        when(itemRepository.findById("invalid")).thenReturn(Optional.empty());
+        when(itemRepository.findById(999L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> itemService.getItemById("invalid"));
+                () -> itemService.getItemById(999L));
 
         assertEquals("Grocery item not found", exception.getMessage());
-        verify(itemRepository, times(1)).findById("invalid");
+        verify(itemRepository, times(1)).findById(999L);
     }
 
     @Test
@@ -86,22 +85,22 @@ class GroceryItemServiceImplTest {
         GroceryItemEntity updated = getItem();
         updated.setPrice(50.0);
 
-        when(itemRepository.findById("item123")).thenReturn(Optional.of(existing));
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(itemRepository.save(any(GroceryItemEntity.class))).thenReturn(updated);
 
-        GroceryItemEntity result = itemService.updateItem("item123", updated);
+        GroceryItemEntity result = itemService.updateItem(1L, updated);
 
         assertEquals(50.0, result.getPrice());
-        verify(itemRepository, times(1)).findById("item123");
+        verify(itemRepository, times(1)).findById(1L);
         verify(itemRepository, times(1)).save(existing);
     }
 
     @Test
     void deleteItem_success() {
-        doNothing().when(itemRepository).deleteById("item123");
+        doNothing().when(itemRepository).deleteById(1L);
 
-        itemService.deleteItem("item123");
+        itemService.deleteItem(1L);
 
-        verify(itemRepository, times(1)).deleteById("item123");
+        verify(itemRepository, times(1)).deleteById(1L);
     }
 }

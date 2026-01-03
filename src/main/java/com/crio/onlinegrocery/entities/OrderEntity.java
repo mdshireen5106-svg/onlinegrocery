@@ -1,31 +1,37 @@
 package com.crio.onlinegrocery.entities;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import jakarta.validation.constraints.NotNull;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-@Document(collection = "orders")
+@Entity
+@Table(name = "orders")
 public class OrderEntity {
 
     @Id
-    private String orderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long orderId;
 
     @NotNull
-    private String customerId;   
-
-    @NotNull
-    private List<String> itemIds; 
+    private Long customerId;
 
     @NotNull
     private LocalDate orderDate;
+
+    @ElementCollection
+    @NotNull
+    private List<Long> itemIds;
 
     @NotNull
     private Double totalPrice;

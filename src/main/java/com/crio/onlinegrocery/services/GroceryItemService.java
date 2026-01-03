@@ -7,11 +7,11 @@ public interface GroceryItemService {
 
     GroceryItemEntity createItem(GroceryItemEntity item);
 
-    GroceryItemEntity getItemById(String itemId);
+    GroceryItemEntity getItemById(Long itemId);
 
     List<GroceryItemEntity> getAllItems();
 
-    GroceryItemEntity updateItem(String itemId, GroceryItemEntity item);
+    GroceryItemEntity updateItem(Long itemId, GroceryItemEntity item);
 
-    void deleteItem(String itemId);
+    void deleteItem(Long itemId);
 }

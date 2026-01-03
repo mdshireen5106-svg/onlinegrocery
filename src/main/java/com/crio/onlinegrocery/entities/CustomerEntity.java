@@ -2,18 +2,22 @@ package com.crio.onlinegrocery.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @NoArgsConstructor
-@Document(collection = "customers")
+@Entity
+@Table(name = "customers")
 public class CustomerEntity {
 
     @Id
-    private String customerId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long customerId;
 
     @NotNull
     private String name;
@@ -27,3 +31,6 @@ public class CustomerEntity {
     @NotNull
     private String phone;
 }
+
+
+

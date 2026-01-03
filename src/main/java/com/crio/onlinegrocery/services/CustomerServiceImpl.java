@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerEntity getCustomerById(String customerId) {
+    public CustomerEntity getCustomerById(Long customerId) {
         return customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
@@ -33,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerEntity updateCustomer(String customerId, CustomerEntity updatedCustomer) {
+    public CustomerEntity updateCustomer(Long customerId, CustomerEntity updatedCustomer) {
         CustomerEntity existing = getCustomerById(customerId);
 
         existing.setName(updatedCustomer.getName());
@@ -45,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(String customerId) {
+    public void deleteCustomer(Long customerId) {
         customerRepository.deleteById(customerId);
     }
 }

@@ -22,7 +22,7 @@ public class GroceryItemServiceImpl implements GroceryItemService {
     }
 
     @Override
-    public GroceryItemEntity getItemById(String itemId) {
+    public GroceryItemEntity getItemById(Long itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("Grocery item not found"));
     }
@@ -33,7 +33,7 @@ public class GroceryItemServiceImpl implements GroceryItemService {
     }
 
     @Override
-    public GroceryItemEntity updateItem(String itemId, GroceryItemEntity updatedItem) {
+    public GroceryItemEntity updateItem(Long itemId, GroceryItemEntity updatedItem) {
         GroceryItemEntity existing = getItemById(itemId);
 
         existing.setName(updatedItem.getName());
@@ -45,7 +45,7 @@ public class GroceryItemServiceImpl implements GroceryItemService {
     }
 
     @Override
-    public void deleteItem(String itemId) {
+    public void deleteItem(Long itemId) {
         itemRepository.deleteById(itemId);
     }
 }

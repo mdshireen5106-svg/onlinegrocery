@@ -22,7 +22,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderEntity getOrderById(String orderId) {
+    public OrderEntity getOrderById(Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
@@ -33,12 +33,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderEntity> getOrdersByCustomerId(String customerId) {
+    public List<OrderEntity> getOrdersByCustomerId(Long customerId) {
         return orderRepository.findByCustomerId(customerId);
     }
 
     @Override
-    public void deleteOrder(String orderId) {
+    public void deleteOrder(Long orderId) {
         orderRepository.deleteById(orderId);
     }
 }

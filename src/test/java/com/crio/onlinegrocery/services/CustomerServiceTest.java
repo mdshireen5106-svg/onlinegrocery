@@ -26,7 +26,7 @@ class CustomerServiceImplTest {
 
     private CustomerEntity getCustomer() {
         CustomerEntity customer = new CustomerEntity();
-        customer.setCustomerId("cust123");
+        customer.setCustomerId(1L); 
         customer.setName("John Doe");
         customer.setEmail("john@example.com");
         customer.setAddress("Bangalore");
@@ -49,25 +49,25 @@ class CustomerServiceImplTest {
     @Test
     void getCustomerById_success() {
         CustomerEntity customer = getCustomer();
-        when(customerRepository.findById("cust123")).thenReturn(Optional.of(customer));
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
 
-        CustomerEntity found = customerService.getCustomerById("cust123");
+        CustomerEntity found = customerService.getCustomerById(1L);
 
         assertNotNull(found);
         assertEquals("john@example.com", found.getEmail());
-        verify(customerRepository, times(1)).findById("cust123");
+        verify(customerRepository, times(1)).findById(1L);
     }
 
     @Test
     void getCustomerById_notFound() {
-        when(customerRepository.findById("invalid")).thenReturn(Optional.empty());
+        when(customerRepository.findById(999L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                customerService.getCustomerById("invalid")
+                customerService.getCustomerById(999L)
         );
 
         assertEquals("Customer not found", exception.getMessage());
-        verify(customerRepository, times(1)).findById("invalid");
+        verify(customerRepository, times(1)).findById(999L);
     }
 
     @Test
@@ -87,22 +87,22 @@ class CustomerServiceImplTest {
         CustomerEntity updated = getCustomer();
         updated.setName("Updated Name");
 
-        when(customerRepository.findById("cust123")).thenReturn(Optional.of(existing));
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(customerRepository.save(any(CustomerEntity.class))).thenReturn(updated);
 
-        CustomerEntity result = customerService.updateCustomer("cust123", updated);
+        CustomerEntity result = customerService.updateCustomer(1L, updated);
 
         assertEquals("Updated Name", result.getName());
-        verify(customerRepository, times(1)).findById("cust123");
+        verify(customerRepository, times(1)).findById(1L);
         verify(customerRepository, times(1)).save(existing);
     }
 
     @Test
     void deleteCustomer_success() {
-        doNothing().when(customerRepository).deleteById("cust123");
+        doNothing().when(customerRepository).deleteById(1L);
 
-        customerService.deleteCustomer("cust123");
+        customerService.deleteCustomer(1L);
 
-        verify(customerRepository, times(1)).deleteById("cust123");
+        verify(customerRepository, times(1)).deleteById(1L);
     }
 }

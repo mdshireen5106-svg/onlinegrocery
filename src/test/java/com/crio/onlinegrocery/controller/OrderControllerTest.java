@@ -41,12 +41,11 @@ class OrderControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Helper method to create a dummy order
     private OrderEntity getOrder() {
         OrderEntity order = new OrderEntity();
-        order.setOrderId("order123");
-        order.setCustomerId("cust123");  // assuming you store customerId in OrderEntity
-        order.setItemIds(List.of("item1", "item2")); // assuming you store itemIds in OrderEntity
+        order.setOrderId(1L);
+        order.setCustomerId(1L); 
+        order.setItemIds(List.of(101L, 102L)); 
         order.setOrderDate(LocalDate.now());
         order.setTotalPrice(100.0);
         return order;
@@ -59,7 +58,7 @@ class OrderControllerTest {
 
         mockMvc.perform(get("/orders"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].customerId").value("cust123"))
+                .andExpect(jsonPath("$[0].customerId").value(1))
                 .andExpect(jsonPath("$[0].totalPrice").value(100.0));
     }
 
@@ -74,7 +73,45 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orderId").value("order123"))
+                .andExpect(jsonPath("$.orderId").value(1))
                 .andExpect(jsonPath("$.totalPrice").value(100.0));
+    }
+
+    @Test
+    void getOrderById_success() throws Exception {
+        Mockito.when(orderRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(getOrder()));
+
+        mockMvc.perform(get("/orders/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customerId").value(1))
+                .andExpect(jsonPath("$.totalPrice").value(100.0));
+    }
+
+    @Test
+    void updateOrder_success() throws Exception {
+        OrderEntity existing = getOrder();
+        OrderEntity updated = getOrder();
+        updated.setTotalPrice(150.0);
+
+        Mockito.when(orderRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(existing));
+        Mockito.when(orderRepository.save(Mockito.any(OrderEntity.class)))
+                .thenReturn(updated);
+
+        mockMvc.perform(put("/orders/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updated)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalPrice").value(150.0));
+    }
+
+    @Test
+    void deleteOrder_success() throws Exception {
+        Mockito.when(orderRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(getOrder()));
+
+        mockMvc.perform(delete("/orders/1"))
+                .andExpect(status().isOk());
     }
 }
